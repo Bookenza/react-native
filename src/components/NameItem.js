@@ -5,10 +5,12 @@ import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 const nameItem = props => {
     return (
 
+    <TouchableOpacity onPress={props.onDelete.bind(this, props.id)}>
     <View style={styles.listItem}> 
     <Text>{props.title}</Text>
-
     </View>
+    </TouchableOpacity>
+
     )
 };
 

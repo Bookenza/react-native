@@ -21,6 +21,7 @@ import {
   TouchableOpacity,
   Dimensions,
   FlatList,
+  Alert,
 } from 'react-native';
 
 import {
@@ -40,22 +41,52 @@ function App()  {
   // const [textInputEmail, setTextInputEmail] = useState("jay@gmail.com");
   const [enteredName, setEnteredName] = useState('');
   const [nameLists, setNameLists] = useState([]);
+  console.log('RE_RENDERING COMPONENT');
+  console.log(nameLists);
 
   //Button Actions
   function AddButtonAction() {
     console.log(enteredName)
 
+    if (enteredName.length === 0) {
+      Alert.alert('Please enter name')
+      return;
+    }
     // setNameLists(currentNames => [...currentNames, enteredName]);
     setNameLists(currentNames => [...currentNames, 
     { id:Math.random().toString(), value:enteredName}]);
 
   console.log(nameLists)
 
-}
+  }
 
 
 const NameInputHandler = (enteredText) => {
   setEnteredName(enteredText);
+}
+
+const removeNameHandler = nameId => {
+
+  // Alert.alert(
+  //   "Confirmation!",
+  //   "Do you want to delete this name?",
+  //   [
+  //     {
+  //       text: "NO",
+  //       onPress: () => console.log("No Pressed"),
+  //       style: "cancel"
+  //     },
+  //     { text: "YES", onPress: () => console.log("YES Pressed") }
+  //   ]
+  // );
+
+  console.log('To be deleted: ' + nameId);
+  console.log(nameLists);
+
+  setNameLists(currentNames => {
+    return currentNames.filter((name) => name.id != nameId);
+  });
+
 }
 
 
@@ -87,7 +118,6 @@ const NameInputHandler = (enteredText) => {
              autoCorrect = {false}
              onChangeText={NameInputHandler}
              value = {enteredName}
-           
              />
 
 
@@ -109,8 +139,12 @@ const NameInputHandler = (enteredText) => {
 <FlatList 
 keyExtractor={(item, index) => item.id}
 data={nameLists}
-renderItem={itemData => <NameItem title={itemData.item.value}/>
-
+// renderItem={itemData => <NameItem title={itemData.item.value}/>
+// renderItem={itemData => <NameItem onDelete={() => console.log('Does that work?')} title={itemData.item.value}/>
+renderItem={itemData => <NameItem 
+  id={itemData.item.id}
+  onDelete={removeNameHandler} 
+  title={itemData.item.value}/>
 
 }
 
